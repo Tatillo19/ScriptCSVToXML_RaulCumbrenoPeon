@@ -1,8 +1,4 @@
-﻿using System.IO;
-using System.Text;
-using System.Xml;
-
-int opcionPrincipal = 0;
+﻿int opcionPrincipal = 0;
 
 while (opcionPrincipal != 3) {
     Console.WriteLine();
@@ -77,57 +73,10 @@ while (opcionPrincipal != 3) {
                             List<Pelicula> peliculas = new List<Pelicula>();
 
                             if (opcionPrincipal == 1) {
-                                string[] lineas = File.ReadAllLines(rutaEntrada);
-
-                                for (int i = 1; i < lineas.Length; i++) {
-                                    string[] campos = new string[6];
-                                    int posicion = 0;
-                                    string campoActual = "";
-                                    bool dentroDeComillas = false;
-
-                                    foreach (char letra in lineas[i]) {
-                                        if (letra == '"') {
-                                            dentroDeComillas = !dentroDeComillas;
-                                        }
-                                        else if (letra == ',' && !dentroDeComillas) {
-                                            if (posicion < 6) campos[posicion] = campoActual;
-                                            posicion++;
-                                            campoActual = "";
-                                        }
-                                        else {
-                                            campoActual += letra;
-                                        }
-                                    }
-                                    if (posicion < 6) campos[posicion] = campoActual;
-
-                                    Pelicula pelicula = new Pelicula(
-                                        campos[0],
-                                        campos[1],
-                                        campos[2],
-                                        campos[3],
-                                        campos[4],
-                                        campos[5]
-                                    );
-
-                                    peliculas.Add(pelicula);
-                                }
+                                peliculas = GestorArchivo.LeerCsv(rutaEntrada);
                             }
                             else {
-                                XmlDocument doc = new XmlDocument();
-                                doc.Load(rutaEntrada);
-
-                                foreach (XmlNode nodo in doc.SelectNodes("//Pelicula")) {
-                                    Pelicula pelicula = new Pelicula(
-                                        nodo["Title"].InnerText,
-                                        nodo["Genre"].InnerText,
-                                        nodo["Premiere"].InnerText,
-                                        nodo["Runtime"].InnerText,
-                                        nodo["IMDBScore"].InnerText,
-                                        nodo["Language"].InnerText
-                                    );
-
-                                    peliculas.Add(pelicula);
-                                }
+                                peliculas = GestorArchivo.LeerXml(rutaEntrada);
                             }
 
                             List<Pelicula> peliculasAExportar = new List<Pelicula>();
@@ -139,21 +88,7 @@ while (opcionPrincipal != 3) {
 
                                 case 4:
                                 case 6:
-                                    List<string> valoresDistintos = new List<string>();
-
-                                    foreach (Pelicula pelicula in peliculas) {
-                                        string valorBusqueda = "";
-                                        if (opcion == 4) {
-                                            valorBusqueda = pelicula.Genre;
-                                        }
-                                        else {
-                                            valorBusqueda = pelicula.Language;
-                                        }
-
-                                        if (!valoresDistintos.Contains(valorBusqueda) && valorBusqueda != "") {
-                                            valoresDistintos.Add(valorBusqueda);
-                                        }
-                                    }
+                                    List<string> valoresDistintos = GestorArchivo.ObtenerValoresUnicos(peliculas, opcion);
 
                                     int numeroDeLista = 1;
                                     foreach (string valor in valoresDistintos) {
@@ -165,114 +100,24 @@ while (opcionPrincipal != 3) {
                                     int numeroElegido = int.Parse(Console.ReadLine());
                                     string valorElegido = valoresDistintos[numeroElegido - 1];
 
-                                    foreach (Pelicula pelicula in peliculas) {
-                                        string valorComparar = "";
-                                        if (opcion == 4) {
-                                            valorComparar = pelicula.Genre;
-                                        }
-                                        else {
-                                            valorComparar = pelicula.Language;
-                                        }
-
-                                        if (valorComparar == valorElegido) {
-                                            peliculasAExportar.Add(pelicula);
-                                        }
-                                    }
+                                    peliculasAExportar = GestorArchivo.FiltrarPorValor(peliculas, opcion, valorElegido);
                                     break;
 
                                 case 5:
                                     Console.Write("Año (se exporta ese año y los posteriores): ");
                                     int anioMinimo = int.Parse(Console.ReadLine());
 
-                                    foreach (Pelicula pelicula in peliculas) {
-                                        string fechaEstreno = pelicula.Premiere;
-                                        string[] partesFecha = fechaEstreno.Split(',');
-                                        string anioTexto = partesFecha[1].Trim();
-                                        int anioDeLaPelicula = int.Parse(anioTexto);
-
-                                        if (anioDeLaPelicula >= anioMinimo) {
-                                            peliculasAExportar.Add(pelicula);
-                                        }
-                                    }
+                                    peliculasAExportar = GestorArchivo.FiltrarPorAnio(peliculas, anioMinimo);
                                     break;
                             }
 
                             int exportadas = 0;
 
                             if (opcionPrincipal == 1) {
-                                XmlWriter escritor = XmlWriter.Create(rutaSalida);
-                                escritor.WriteStartDocument();
-                                escritor.WriteStartElement("Peliculas");
-
-                                foreach (Pelicula pelicula in peliculasAExportar) {
-                                    escritor.WriteStartElement("Pelicula");
-
-                                    escritor.WriteStartElement("Title");
-                                    escritor.WriteString(pelicula.Title);
-                                    escritor.WriteEndElement();
-
-                                    escritor.WriteStartElement("Genre");
-                                    escritor.WriteString(pelicula.Genre);
-                                    escritor.WriteEndElement();
-
-                                    escritor.WriteStartElement("Premiere");
-                                    escritor.WriteString(pelicula.Premiere);
-                                    escritor.WriteEndElement();
-
-                                    escritor.WriteStartElement("Runtime");
-                                    escritor.WriteString(pelicula.Runtime);
-                                    escritor.WriteEndElement();
-
-                                    escritor.WriteStartElement("IMDBScore");
-                                    escritor.WriteString(pelicula.IMDBScore);
-                                    escritor.WriteEndElement();
-
-                                    escritor.WriteStartElement("Language");
-                                    escritor.WriteString(pelicula.Language);
-                                    escritor.WriteEndElement();
-
-                                    escritor.WriteEndElement();
-                                    exportadas++;
-                                }
-
-                                escritor.WriteEndElement();
-                                escritor.WriteEndDocument();
-                                escritor.Close();
+                                exportadas = GestorArchivo.EscribirXml(rutaSalida, peliculasAExportar);
                             }
                             else {
-                                StringBuilder textoCsv = new StringBuilder();
-                                textoCsv.AppendLine("Title,Genre,Premiere,Runtime,IMDB Score,Language");
-
-                                foreach (Pelicula pelicula in peliculasAExportar) {
-                                    string[] campos = {
-                                        pelicula.Title,
-                                        pelicula.Genre,
-                                        pelicula.Premiere,
-                                        pelicula.Runtime,
-                                        pelicula.IMDBScore,
-                                        pelicula.Language
-                                    };
-
-                                    string linea = "";
-
-                                    for (int i = 0; i < 6; i++) {
-                                        if (campos[i].Contains(",")) {
-                                            linea += "\"" + campos[i] + "\"";
-                                        }
-                                        else {
-                                            linea += campos[i];
-                                        }
-
-                                        if (i < 5) {
-                                            linea += ",";
-                                        }
-                                    }
-
-                                    textoCsv.AppendLine(linea);
-                                    exportadas++;
-                                }
-
-                                File.WriteAllText(rutaSalida, textoCsv.ToString());
+                                exportadas = GestorArchivo.EscribirCsv(rutaSalida, peliculasAExportar);
                             }
 
                             Console.WriteLine(exportadas + " películas exportadas a " + rutaSalida);

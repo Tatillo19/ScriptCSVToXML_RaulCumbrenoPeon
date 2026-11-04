@@ -1,4 +1,5 @@
-public class Pelicula{
+public class Pelicula
+{
     public string Title { get; set; }
     public string Genre { get; set; }
     public string Premiere { get; set; }
@@ -6,7 +7,8 @@ public class Pelicula{
     public string IMDBScore { get; set; }
     public string Language { get; set; }
 
-    public Pelicula(string pTit, string pGenre, string pPremiere, string pRuntime, string pImdbScore, string pLanguage) {
+    public Pelicula(string pTit, string pGenre, string pPremiere, string pRuntime, string pImdbScore, string pLanguage)
+    {
         Title = pTit;
         Genre = pGenre;
         Premiere = pPremiere;
