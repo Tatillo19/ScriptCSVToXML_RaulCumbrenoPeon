@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "y5rOzsuZTIw=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\tatil\\OneDrive\\Escritorio\\2º FP DAM3\\Acceso a Datos\\1ºTrimestre\\segundoExamen\\ScriptCSVToXML_RaulCumbreñoPeon\\ScriptCSVToXML_RaulCumbreñoPeon.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\tatil\\.nuget\\packages\\system.diagnostics.eventlog\\11.0.0\\system.diagnostics.eventlog.11.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
