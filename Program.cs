@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 class Program {
-    // 1. Metodo
-    // Metodo principal que arranca el log y muestra el menu con while y switch
+    // 1. Método
+    // Método principal que arranca el log y muestra el menú con while y switch
     static void Main(string[] args) {
-        // Nada mas empezar preparamos el log en Windows
+        // Nada más empezar preparamos el log en Windows
         Logger.Inicializar();
 
         // Rutas por defecto de los archivos
@@ -14,7 +14,7 @@ class Program {
 
         bool salir = false;
 
-        // Bucle del menu para que no se cierre hasta que pulsemos salir
+        // Bucle del menú para que no se cierre hasta que pulsemos salir
         while (!salir) {
             Console.WriteLine("\nCONVERSOR NETFLIX (CSV a XML y XML a CSV)");
             Console.WriteLine("Ruta CSV: " + rutaCsv);
@@ -23,7 +23,7 @@ class Program {
             Console.WriteLine("2. Pasar de CSV a XML");
             Console.WriteLine("3. Pasar de XML a CSV");
             Console.WriteLine("4. Salir");
-            Console.Write("Elige una opcion: ");
+            Console.Write("Elige una opción: ");
 
             string opcion = Console.ReadLine();
 
@@ -58,21 +58,21 @@ class Program {
                     break;
 
                 default:
-                    Console.WriteLine("Esa opcion no vale.");
+                    Console.WriteLine("Esa opción no vale.");
                     break;
             }
         }
     }
 
-    // 2. Metodo
-    // Metodo para elegir con switch si queremos exportar todo o filtrar por genero, anio o idioma
+    // 2. Método
+    // Método para elegir con switch si queremos exportar todo o filtrar por género, año o idioma
     static void ElegirFiltro(string origen, string destino, string tipoConversion) {
-        Console.WriteLine("\nOPCIONES DE EXPORTACION (" + tipoConversion + ")");
+        Console.WriteLine("\nOPCIONES DE EXPORTACIÓN (" + tipoConversion + ")");
         Console.WriteLine("1. Todo el archivo entero");
-        Console.WriteLine("2. Filtrar por genero");
+        Console.WriteLine("2. Filtrar por género");
         Console.WriteLine("3. Filtrar por año (ese año y más nuevas)");
         Console.WriteLine("4. Filtrar por idioma");
-        Console.Write("Elige una opcion: ");
+        Console.Write("Elige una opción: ");
 
         string subOpcion = Console.ReadLine();
 
@@ -82,7 +82,7 @@ class Program {
                 break;
 
             case "2":
-                // Leemos el archivo primero para sacar la lista de generos que hay
+                // Leemos el archivo primero para sacar la lista de géneros que hay
                 List<Pelicula> listaGeneros;
                 if (tipoConversion == "CSV a XML") {
                     listaGeneros = GestorArchivo.LeerCsv(origen);
@@ -93,27 +93,27 @@ class Program {
 
                 List<string> generos = GestorArchivo.ObtenerGeneros(listaGeneros);
 
-                Console.WriteLine("\nGeneros disponibles:");
+                Console.WriteLine("\nGéneros disponibles:");
                 foreach (string g in generos) {
                     Console.WriteLine("- " + g);
                 }
 
-                Console.Write("\nEscribe el genero que quieres: ");
+                Console.Write("\nEscribe el género que quieres: ");
                 string generoElegido = Console.ReadLine();
                 GestorArchivo.Exportar(origen, destino, tipoConversion, 2, generoElegido);
                 break;
 
             case "3":
-                Console.Write("Escribe el anio minimo (ej: 2020): ");
-                string anio = Console.ReadLine();
+                Console.Write("Escribe el año mínimo (ej: 2020): ");
+                string año = Console.ReadLine();
 
                 try {
-                    // Probamos si lo que ha escrito es un numero de verdad
-                    int.Parse(anio);
-                    GestorArchivo.Exportar(origen, destino, tipoConversion, 3, anio);
+                    // Probamos si lo que ha escrito es un número de verdad
+                    int.Parse(año);
+                    GestorArchivo.Exportar(origen, destino, tipoConversion, 3, año);
                 }
                 catch {
-                    Logger.LogError("Has escrito un anio que no es un numero: " + anio);
+                    Logger.LogError("Has escrito un año que no es un número: " + año);
                 }
                 break;
 
@@ -140,7 +140,7 @@ class Program {
                 break;
 
             default:
-                Console.WriteLine("Opcion no valida.");
+                Console.WriteLine("Opción no válida.");
                 break;
         }
     }

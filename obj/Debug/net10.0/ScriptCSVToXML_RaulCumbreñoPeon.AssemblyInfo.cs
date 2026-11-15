@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScriptCSVToXML_RaulCumbreñoPeon")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e51e790ec9e30c019a5d03bb013e3c9d80ba975")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+425b3af20192d62a937287948feaeed356369d12")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScriptCSVToXML_RaulCumbreñoPeon")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScriptCSVToXML_RaulCumbreñoPeon")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
